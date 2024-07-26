@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<div class="form-container">
+    <form id="register-form">
+        <h1>REGISTER!</h1>
+        <div class="box1">
+            <h3>Email</h3>
+            <div class="after"></div>
+            <input type="email" id="email" name="email" placeholder="@gmail.com" required>
+        </div>
+
+        <div class="box1">
+            <h3>Password</h3>
+            <div class="after"></div>
+            <input type="password" id="password" name="password" placeholder="......" required>
+        </div>
+        <button type="submit" id="register-button">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+</div>
+
+<script>
+document.getElementById('register-form').addEventListener('submit', function(event) {
+        event.preventDefault();        
+        const registerButton = document.getElementById('register-button');
+        registerButton.disabled = true;
+        registerButton.innerText = 'Signing Up...';
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const formData = new URLSearchParams();
+        formData.append('email', email);
+        formData.append('password', password);
+
+        fetch('https://cc-frauddetection-server.onrender.com/api/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to register');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Registration successful! Please log in.');
+            window.location.href = '{{ url_for("login") }}';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Registration failed. Please try again.');
+        })
+        .finally(() => {
+            registerButton.disabled = false;
+            registerButton.innerText = 'Sign Up';
+        });
+});
+</script>
+{% endblock %}

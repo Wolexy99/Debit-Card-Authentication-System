@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<div class="success-container">
+    <h2>Congratulations!</h2>
+    <p>Your card has been successfully validated.</p>
+    <!-- Add any additional content or styling as needed -->
+</div>
+{% endblock %}

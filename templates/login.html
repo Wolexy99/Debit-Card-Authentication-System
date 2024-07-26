@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<div class="form-container">
+    <form id="login-form">
+        <h1>WELCOME!</h1>
+        <div class="box1">
+            <h3>Email</h3>
+            <div class="after"></div>
+            <input type="email" id="email" placeholder="@gmail.com" required>
+        </div>
+
+        <div class="box1">
+            <h3>Password</h3>
+            <div class="after"></div>
+            <input type="password" id="password" placeholder="......" required>
+        </div>
+        <button type="submit" id="login-button">Login</button>
+    </form>
+    <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+</div>
+
+<script>
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const loginButton = document.getElementById('login-button');
+    loginButton.disabled = true;
+    loginButton.innerText = 'Loading...';
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    fetch('https://cc-frauddetection-server.onrender.com/api/users/auth', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.email) {
+            localStorage.setItem('email', data.email);
+            // Redirect to dashboard
+            window.location.href = '/dashboard';
+        } else {
+            alert('Login failed: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    })
+    .finally(() => {
+        loginButton.disabled = false;
+        loginButton.innerText = 'Login';
+    });
+});
+</script>
+{% endblock %}

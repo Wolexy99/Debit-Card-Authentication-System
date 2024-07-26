@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(150deg, #000000, #5d161c);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+nav {
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+
+nav ul li a:hover {
+    background: purple;
+}
+
+.content {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form h1 {
+    font-size: 30px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.box1 h3 {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.after {
+    position: absolute;
+    content: "";
+    width: 211px;
+    height: 45px;
+    background-color: #fff;
+    opacity: 7%;
+    z-index: -1;
+}
+
+
+
+.form-container input {
+    border: none;
+    outline: none;
+    height: 45px;
+    padding-left: 17px;
+    border-radius: 5px;
+    color: #fff;
+    background: none;
+}
+
+
+
+button[type="submit"] {
+    margin-top: 15px;
+    border: none;
+    outline: none;
+    height: 45px;
+    color: #fff;
+    background-color: #680008;
+    cursor: pointer;
+    border-radius: 2px;
+    width: 211px;
+}
+
+button[type="submit"]:hover {
+    opacity: 50%;
+}
+
+p{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+ p a{
+    margin-top: 10px;
+    border: 1px solid #fff;
+    outline: none;
+    height: 35px;
+    color: #fff;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 211px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes li {
+    background: #680008;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+
+
+
+
+
+
+
+
+

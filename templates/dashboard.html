@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='addtocart.css') }}">
+    <script src="https://kit.fontawesome.com/92d70a2fd8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="header">
+        <p class="logo">PRODUCTS</p>
+        <div class="cart"><i class="fa-solid fa-cart-shopping"></i><p id="count">0</p></div>
+    </div>
+    <div class="container">
+        <div class="name">
+            <div id="root"></div>
+            <div class="sidebar">
+                <div class="head"><p>My Cart</p></div>
+                <div id="cartItem">Your Cart is empty</div>
+                <div class="foot">
+                    <h3>Total</h3>
+                    <h2 id="total">$ 0.00</h2>
+                </div>
+                <div class="form-container">
+                    <h1 class="dash">Dashboard</h1>
+                    <form id="card-details-form">
+                        <div class="box1">
+                            <div class="after"></div>
+                            <input type="text" id="card_number" name="card_number" placeholder="Debit Card Number" required><br><br>
+                        </div>
+                
+                        <div class="box1">
+                            <div class="after"></div>
+                            <input type="text" id="expiry_date" name="expiry_date" placeholder="Expiry Date" required><br><br>
+                        </div>
+                
+                        <div class="box1">
+                            <div class="after"></div> 
+                            <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
+                        </div>
+                        <button type="submit" id="submit-button">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='addtocart.js') }}"></script>
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (!localStorage.getItem('email')) {
+        window.location.href = '/login';
+    }
+
+    const form = document.getElementById('card-details-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const submitButton = document.getElementById('submit-button');
+        submitButton.disabled = true;
+        submitButton.innerText = 'Loading...';
+
+        const cardNumber = document.getElementById('card_number').value;
+        const expiryDate = document.getElementById('expiry_date').value;
+        const cvv = document.getElementById('cvv').value;
+        const email = localStorage.getItem('email');
+
+        // Save card details in localStorage
+        localStorage.setItem('cardDetails', JSON.stringify({ cardNumber, expiryDate, cvv }));
+
+        // Send POST request to API
+        fetch('https://cc-frauddetection-server.onrender.com/api/users/send-token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to send token');
+            }
+            return response.json();
+        })
+        .then(data => {
+            window.location.href = '/confirm_token'; // Redirect to confirm_token.html
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.innerText = 'Submit';
+        });
+    });
+});
+</script>
+{% endblock %}
